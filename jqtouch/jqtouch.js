@@ -31,6 +31,7 @@
         var MOVE_EVENT = SUPPORT_TOUCH? 'touchmove' : 'mousemove';
         var END_EVENT = SUPPORT_TOUCH? 'touchend' : 'mouseup';
         var CANCEL_EVENT = SUPPORT_TOUCH? 'touchcancel' : 'mouseout'; // mouseout on document
+        var KEY_PAGE_INITIALIZED = 'page-initialized';
 
         // Initialize internal variables
         var state_started,
@@ -648,6 +649,11 @@
                     // branch on href.search (ie, ..?abc=1&ijk=2)
                     if (!match(fromPage.search, toPage.search)) {
                         $('#' + fromPage.id).trigger('pageout', {hash: '#' + fromPage.id, search: fromPage.search});
+
+                        if ($('#' + toPage.id).data(KEY_PAGE_INITIALIZED) !== true) {
+                          $('#' + toPage.id).data(KEY_PAGE_INITIALIZED, true);
+                          $body.trigger('pageinit', {page: ('#' + toPage.id)});
+                        }
                         $('#' + toPage.id).trigger('pagein', {hash: '#' + toPage.id, search: toPage.search});
                         removePageInHistory(toPage.i, fromPage.i, {section: fromPage.section});
                     } else {
@@ -707,6 +713,11 @@
                     heavy: param.heavy,
                     pagecallback: function() {
                         $('#' + fromPage.id).trigger('pagesuspense', {hash: '#' + fromPage.id, search: fromPage.search});
+
+                        if (toPage.data(KEY_PAGE_INITIALIZED) !== true) {
+                          toPage.data(KEY_PAGE_INITIALIZED, true);
+                          $body.trigger('pageinit', {page: ('#' + toPage[0].id)});
+                        }
                         toPage.trigger('pagein', {hash: '#' + toPage.attr('id'), search: param.search});
                     }
                 });
@@ -722,6 +733,11 @@
                 // branch on href.search (ie, ..?abc=1&ijk=2)
                 if (!match(fromPage.search, search)) {
                     $('#' + fromPage.id).trigger('pageout', {hash: '#' + fromPage.id, search: fromPage.search});
+
+                    if (toPage.data(KEY_PAGE_INITIALIZED) !== true) {
+                      toPage.data(KEY_PAGE_INITIALIZED, true);
+                      $body.trigger('pageinit', {page: ('#' + toPage[0].id)});
+                    }
                     toPage.trigger('pagein', {hash: '#' + toPage.attr('id'), search: param.search});
                     removePageInHistory(fromPage.i, 0, {section: fromPage.section});
                     addPageToHistory(toPage, search, pageback, adjustedName);
@@ -839,7 +855,6 @@
                 $node.children().find('[section]:not([section~="' + section + '"])').addClass('missection');
 
                 $body.trigger('pageInserted', {page: $node.appendTo($body)});
-                $body.trigger("pageinit", {page: $node.appendTo($body)});
 
                 if ($node.hasClass('current') || !targetPage) {
                     targetPage = $node;
@@ -1129,12 +1144,12 @@
                         if (returns) {
                           for (var i=0, len=returns.length; i<len; i++) {
                             var item = returns[i];
-                            var $item = $el.find('input[data-sourcename="' + item.name + '"], input[name="' + item.name + '"]').first();
+                            var $item = $el.find('input[data-sourcename="' + item.name + '"], input[name="' + item.name + '"], textarea[data-sourcename="' + item.name + '"], textarea[name="' + item.name + '"]').first();
                             if (i === 0 && $item.length === 0) {
                               // sloppy workaround for the simpliest
-                              var $item = $el.find('input[value]').eq(i);
+                              var $item = $el.find('input[value], textarea[value]').eq(i);
                             }
-                            console.warn("setting value for item: " + $item.attr("id"));
+                            console.warn("setting value for item: " + $item.attr("name"));
                             $item.val(item.value);
                             if ($item.attr('type') === 'radio' || $item.attr('type') === 'checkbox') {
                               $item.attr('checked', true);
@@ -1143,12 +1158,14 @@
                         } // (!returns) indicates dialog was cancelled
                       };
 
-                      $el.find('input[data-sourcename]').each(function(i, input) {
+                      $el.find('input[data-sourcename], textarea[data-sourcename]').each(function(i, input) {
                         var $input = $(input);
                         var name = $input.attr('data-sourcename');
                         if (name) {
                           search[name] = $input.val();
                         }
+                        var $target = $(hash).data('referrer', $el).find('input[data-sourcename="' + name + '"], input[name="' + name + '"], textarea[data-sourcename="' + name + '"], textarea[name="' + name + '"]').first();
+                        $target.val($input.val());
                       });
                     }
 
@@ -1629,6 +1646,11 @@
                     }
 
                     addPageToHistory(currentAside);
+
+                    if (currentAside.data(KEY_PAGE_INITIALIZED) !== true) {
+                      currentAside.data(KEY_PAGE_INITIALIZED, true);
+                      currentAside.trigger('pageinit', {page: currentAside.attr('id')});
+                    }
                     currentAside.trigger('pagein', {hash: '#' + currentAside[0].id, search: {}, referer: document.referrer});
                 }
                 defaultSection = "main";
@@ -1654,6 +1676,11 @@
             }
             currentPage.addClass('current alphapage');
             addPageToHistory(currentPage);
+
+            if (currentPage.data(KEY_PAGE_INITIALIZED) !== true) {
+              currentPage.data(KEY_PAGE_INITIALIZED, true);
+              currentPage.trigger('pageinit', {page: currentPage.attr('id')});
+            }
             currentPage.trigger('pagein', {hash: '#' + currentPage[0].id, search: search, referer: document.referrer});
 
             // adjust visibiliy of elements
@@ -1666,9 +1693,6 @@
             // move to init page be specified in querystring
             var $page = $("#jqt > " + startpage);
             $page = $("#jqt > " + startpage);
-            $page.each(function(i, page) {
-              $body.trigger("pageinit");
-            });
 
             if (startpage) {
               var section = $page.attr("section");

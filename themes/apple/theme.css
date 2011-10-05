@@ -46,6 +46,9 @@ body {
 
 #jqt > * .contentwrap {
     display: -webkit-box; display: -moz-box; display: box;
+    -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
+    -webkit-box-pack: justify; -moz-box-pack: justify; box-pack: justify;
+    -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
     position: relative;
     -webkit-box-flex: 10; -moz-box-flex: 10; box-flex: 10;
     min-height: 100%;
@@ -75,6 +78,40 @@ body {
     content: attr(title);
 }
 
+#jqt > * .split {
+    display: -webkit-box; display: -moz-box; display: box;
+    position: relative;
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    -webkit-box-orient: horizontal; -moz-box-orient: horizontal; box-orient: horizontal;
+    -webkit-box-pack: justify; -moz-box-pack: justify; box-pack: justify;
+    -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
+    min-height: 100%; height: 100%; width: 100%;
+    margin: 0;
+}
+
+#jqt > * .split > * {
+    display: -webkit-box; display: -moz-box; display: box;
+    position: relative;
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
+    -webkit-box-pack: justify; -moz-box-pack: justify; box-pack: justify;
+    -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
+    height: 100%; min-width: 320px;
+    border-radius: 5px;
+    /* border-top workaround the bug/feature that mobile safari skip the child (such as ui) padding */
+    border-top: 1px solid transparent;
+    margin-top: -1px;
+}
+
+#jqt > * .split > .aside {
+    width: 320px;
+}
+
+#jqt > * .split > .main {
+    -webkit-box-flex: 10; -moz-box-flex: 10; box-flex: 10;
+    border-left: 1px solid black;
+}
+
 @-moz-document url-prefix() {
     #jqt > div, #jqt > form {
     }
@@ -83,8 +120,8 @@ body {
     }
 }
 
-#jqt > * > div:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper),
-#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper) {
+#jqt > * > div:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split),
+#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split) {
     /* back-compat worthwhile? */
     top: 0; left: 0; right: 0;
     /* min-height: 100%; */
@@ -103,7 +140,7 @@ body {
 }
 
 #jqt > * .contentwrap > .content,
-#jqt > * .contentwrap > :first-child:not(.noncontent) {
+#jqt > * .contentwrap > :first-child:not(.noncontent):not(.split) {
     position: absolute;
     display: block;
     top: 0; left: 0; right: 0;
@@ -1346,7 +1383,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
     height: 1.2em;
     -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
     text-align: center;
-    bottom: 27%; right: 0%; top: auto; left: auto; 
+    bottom: 27%; right: 0%; top: auto; left: auto;
     width: auto;
     padding: 1px;
     background-color: #C02020;
@@ -1941,6 +1978,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
     display: -webkit-box; display: -moz-box; display: box;
     -webkit-box-flex: 10; -moz-box-flex: 10; box-flex: 10;
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    -webkit-box-orient: horizontal; -moz-box-orient: horizontal; box-orient: horizontal;
 }
 
 #jqt form ul li.noflex, #jqt ul.form li.noflex,
@@ -1998,6 +2036,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
     border: 0; border: 1px solid transparent;
     padding: 0;
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    -webkit-box-orient: horizontal; -moz-box-orient: horizontal; box-orient: horizontal;
     -webkit-text-size-adjust: none;
     -webkit-appearance: none; -moz-appearance: none;
     -webkit-user-select: text;
@@ -2269,13 +2308,12 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
     border-width: 0;
     border-radius: 4px;
     background: black url(img/on_off.png) no-repeat;
-    background-position: 0 center;
+    background-position: -55px center;
     -webkit-transition: background-position .15s;
 }
 
 #jqt input[type="checkbox"].onoff:checked {
-    background-position: -55px 0;
-    -webkit-transition: background-position .15s;
+    background-position: 0 center;
 }
 
 /* @end */
@@ -2573,7 +2611,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 }
 
 #jqt ul.detail li.header {
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(127, 127, 127, 0.75)), to(rgba(127, 127, 127, 0)));   
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(127, 127, 127, 0.75)), to(rgba(127, 127, 127, 0)));
 }
 
 #jqt ul.detail li.description {

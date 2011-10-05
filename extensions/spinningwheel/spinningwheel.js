@@ -62,13 +62,13 @@ $(document).ready(function() {
     } else {
       wheel.reset(dateobject);
     }
-    $target.find(".sw-allday").attr("checked", !!dateobject.hours);      
+    $target.find(".sw-allday").attr("checked", !dateobject.hours);
     $target.find("input[name='starts']").click();
   });
   $("#jqt .datewheelpane .sw-allday").bind("change", function() {
     var $target = $(this);
     var checked = $target.attr("checked");
-    $target.parents(".datewheelpane").data("spinningwheel").setAlldayMode(!checked);
+    $target.parents(".datewheelpane").data("spinningwheel").setAlldayMode(checked);
   });
   $("#jqt .datewheelpane .sw-starts").bind("click", function() {
     var $target = $(this);
