@@ -54,13 +54,15 @@
                 cacheGetRequests: true,
                 debug: false,
                 fallback2dAnimation: 'fade',
+                defaultAnimation: 'slideleft',
                 fixedViewport: true,
                 formSelector: 'form',
                 fullScreen: true,
                 fullScreenClass: 'fullscreen',
                 hoverDelay: 50,
                 icon: null,
-                icon4: null, // experimental
+                iconPad: null, // available in iOS 4.2 and later. 
+                icon4: null, // available in iOS 4.2 and later.
                 moveThreshold: 10,
                 preloadImages: false,
                 pressDelay: 1000,
@@ -91,8 +93,8 @@
             };
 
         function _debug(message) {
-            now = (new Date).getTime();
-            delta = now - lastTime;
+            var now = (new Date).getTime();
+            var delta = now - lastTime;
             lastTime = now;
             if (jQTSettings.debug) {
                 if (message) {
@@ -136,7 +138,7 @@
 
             // Find the nearest tappable ancestor
             if (!$el.is(touchSelectors.join(', '))) {
-                var $el = $(e.target).closest(touchSelectors.join(', '));
+                $el = $(e.target).closest(touchSelectors.join(', '));
             }
 
             // Prevent default if we found an internal link (relative or absolute)
@@ -351,20 +353,16 @@
                 };
             }
 
-            // Set appropriate icon (retina display stuff is experimental)
-            if (jQTSettings.icon || jQTSettings.icon4) {
-                var precomposed, appropriateIcon;
-                if (jQTSettings.icon4 && window.devicePixelRatio && window.devicePixelRatio === 2) {
-                    appropriateIcon = jQTSettings.icon4;
-                } else if (jQTSettings.icon) {
-                    appropriateIcon = jQTSettings.icon;
-                } else {
-                    appropriateIcon = false;
-                }
-                if (appropriateIcon) {
-                    precomposed = (jQTSettings.addGlossToIcon) ? '' : '-precomposed';
-                    hairExtensions += '<link rel="apple-touch-icon' + precomposed + '" href="' + appropriateIcon + '" />';
-                }
+            // Set appropriate icon (retina display available in iOS 4.2 and later.)
+            var precomposed = (jQTSettings.addGlossToIcon) ? '' : '-precomposed';
+            if (jQTSettings.icon) {
+                hairExtensions += '<link rel="apple-touch-icon' + precomposed + '" href="' + jQTSettings.icon + '" />';
+            }
+            if (jQTSettings.iconPad) {
+                hairExtensions += '<link rel="apple-touch-icon' + precomposed + '" sizes="72x72" href="' + jQTSettings.iconPad + '" />';
+            }
+            if (jQTSettings.icon4) {
+                hairExtensions += '<link rel="apple-touch-icon' + precomposed + '" sizes="114x114" href="' + jQTSettings.icon4 + '" />';
             }
 
             // Set startup screen
@@ -607,7 +605,7 @@
 
             // Init some vars
             var target = $el.attr('target'),
-                hash = $el.attr('hash'),
+                hash = $el.attr('hash') || ($el.prop && $el.prop('hash')), // jQuery 1.6+ attr vs. prop
                 animation = null;
 
             if ($el.isExternalLink()) {
@@ -643,8 +641,8 @@
                 };
 
                 if (!animation) {
-                    _log('Animation could not be found. Using slideleft.');
-                    animation = 'slideleft';
+                    _log('Animation could not be found. Using ' + jQTSettings.defaultAnimation + '.');
+                    animation = jQTSettings.defaultAnimation;
                 }
 
                 if (hash && hash !== '#') {
@@ -695,11 +693,9 @@
                 deltaY = 0,
                 deltaT = 0;
 
-            if (event.changedTouches && event.changedTouches.length) {
-                touch = event.changedTouches[0];
-                startX = touch.pageX;
-                startY = touch.pageY;
-            }
+            touch = (e.changedTouches && e.changedTouches.length) ? e.changedTouches[0] : e;
+            startX = touch.clientX;
+            startY = touch.clientY;
 
             // Prep the element
             $el.bind(MOVE_EVENT, touchMoveHandler).bind(END_EVENT,touchEndHandler).bind(CANCEL_EVENT,touchCancelHandler);
@@ -727,7 +723,7 @@
 
             function touchEndHandler(e) {
                 _debug();
-                // updateChanges();
+                // updateChanges(e);
                 $el.unbind(END_EVENT,touchEndHandler).unbind(CANCEL_EVENT,touchCancelHandler);
                 clearTimeout(hoverTimeout);
                 clearTimeout(pressTimeout);
@@ -742,7 +738,7 @@
 
             function touchMoveHandler(e) {
                 // _debug();
-                updateChanges();
+                updateChanges(e);
                 var absX = Math.abs(deltaX);
                 var absY = Math.abs(deltaY);
                 var direction;
@@ -762,11 +758,11 @@
                 }
             }
 
-            function updateChanges() {
+            function updateChanges(e) {
                 // _debug();
-                var firstFinger = event.changedTouches[0] || null;
-                deltaX = firstFinger.pageX - startX;
-                deltaY = firstFinger.pageY - startY;
+                var firstFinger = e.changedTouches ? e.changedTouches[0] : e;
+                deltaX = firstFinger.clientX - startX;
+                deltaY = firstFinger.clientY - startY;
                 deltaT = (new Date).getTime() - startTime;
                 // _debug('deltaX:'+deltaX+';deltaY:'+deltaY+';');
             }
