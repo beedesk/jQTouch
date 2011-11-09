@@ -20,7 +20,7 @@ body {
     font-family: "Helvetica Neue", Helvetica;
     -webkit-perspective: 800;
     -webkit-transform-style: preserve-3d;
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -121,10 +121,15 @@ only screen and (min-device-width: 1024px) {
 
 #jqt > .front {
     z-index: 100;
+    -webkit-transform: translateZ(0.01px);
 }
 
 #jqt > * .missection {
     display: none !important;
+}
+
+#jqt .out {
+    z-index: 0 !important;
 }
 
 #jqt .in.start, #jqt .out.start {
