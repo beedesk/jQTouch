@@ -26,7 +26,7 @@ body {
     -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
     -webkit-box-pack: start; -moz-box-pack: start; box-pack: start;
     -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
-    min-height: 100%;
+    height: 100%;
 }
 
 #jqt > * > h2 {
@@ -44,18 +44,22 @@ body {
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
 }
 
-#jqt > * .contentwrap {
+#jqt > * .contentwrap, #jqt > * .touchscroll {
     display: -webkit-box; display: -moz-box; display: box;
     -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
     -webkit-box-pack: justify; -moz-box-pack: justify; box-pack: justify;
     -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
     position: relative;
     -webkit-box-flex: 10; -moz-box-flex: 10; box-flex: 10;
-    min-height: 100%;
     bottom: 0; left: 0; right: 0;
     margin: 0px; margin-top: 0px;
     padding-top: 0px;
     overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+    
 }
 
 #jqt > * .contentwrap[title]::before,

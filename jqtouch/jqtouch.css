@@ -128,10 +128,6 @@ only screen and (min-device-width: 1024px) {
     display: none !important;
 }
 
-#jqt .out {
-    z-index: 0 !important;
-}
-
 #jqt .in.start, #jqt .out.start {
     -webkit-transition-duration: 350ms;
     -webkit-transition-timing-function: ease-in-out;
