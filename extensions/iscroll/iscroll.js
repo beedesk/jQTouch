@@ -15,6 +15,86 @@
  */
 
 (function(){
+
+$(document).ready(function(){
+  // initialize iscroll
+  var KEY_ISCROLL_OBJ = 'iscroll_object';
+  function refreshScroll($pane) {
+    $pane.find('.s-scrollwrapper, .s-innerscrollwrapper').each(function (i, wrap) {
+      var $wrapper = $(wrap);
+      var scroll = $wrapper.data(KEY_ISCROLL_OBJ);
+      if (scroll !== undefined && scroll !== null) {
+        scroll.refresh();
+      }
+    });
+  }
+
+  var generatedRows = 0;
+  function loaded() {
+    $("#jqt").children().each(function (i, pane) {
+      $(pane).find('.s-scrollwrapper, .s-innerscrollwrapper').each(function (i, wrap) {
+        var $wrapper = $(wrap);
+
+        var data = $wrapper.data(KEY_ISCROLL_OBJ);
+        if (data === undefined || data === null) {
+          var scroll;
+          var options = {};
+          if ($wrapper.hasClass("scrollrefresh")) {
+            options = {
+              pullToRefresh: "down",
+              onPullDown: function () {
+                setTimeout(function () {
+                  var el, li, i;
+                  el = $("#z-taskdue")[0];
+
+                  for (i=0; i<3; i++) {
+                    li = document.createElement('li');
+                    li.innerText = 'Generated row ' + (++generatedRows);
+                    el.insertBefore(li, el.childNodes[0]);
+                  }
+
+                  scroll.refresh(); // IMPORTANT!
+                }, 1000); // <-- Simulate network congestion, remove setTimeout from production!
+              }
+            };
+          } else if ($wrapper.hasClass("scrollzoompane")) {
+            options = {
+              zoom:true
+            };
+            console.warn("special scroll: " + "scrollzoompane");
+          }
+
+          scroll = new iScroll(wrap, options);
+          $wrapper.data(KEY_ISCROLL_OBJ, scroll);
+          scroll.refresh();
+        }
+      });
+      $(pane).bind('pageAnimationEnd', function(event, info) {
+        if (info.direction == 'in') {
+          refreshScroll($(this));
+        }
+      });
+    });
+    $(window).resize(function() {
+      $('#jqt > .current').each(function(i, one) {
+        refreshScroll($(one));
+      });
+    });
+  }
+
+  loaded();
+
+  setTimeout(function() {
+    loaded();
+    $(window).resize();
+
+    setTimeout(function() {
+      $(window).resize();
+    }, 1500);
+  }, 50);
+});
+  
+/* original iScroll */
 function iScroll (el, options) {
 	var that = this, doc = document, div, i;
 
