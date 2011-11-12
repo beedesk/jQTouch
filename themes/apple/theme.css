@@ -40,6 +40,7 @@ body {
 
 #jqt > * > * {
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+    width: 100%;
 }
 
 #jqt > * .contentwrap {
@@ -119,8 +120,8 @@ body {
     }
 }
 
-#jqt > * > div:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split),
-#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split) {
+#jqt > * > div:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split):not(.view),
+#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split):not(.view) {
     /* back-compat worthwhile? */
     top: 0; left: 0; right: 0;
     /* min-height: 100%; */
@@ -139,7 +140,7 @@ body {
 }
 
 #jqt > * .contentwrap > .content,
-#jqt > * .contentwrap > :first-child:not(.noncontent):not(.split) {
+#jqt > * .contentwrap > :first-child:not(.noncontent):not(.split):not(.view) {
     position: absolute;
     display: block;
     top: 0; left: 0; right: 0;
@@ -1660,7 +1661,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
     list-style-type: none;
     padding: 10px;
     line-height: 23px;
-    -webkit-transform: translate3d(0,0,0); /* expensive way to avoid flickr */
+    overflow: hidden;
     min-height: 44px;
 }
 
@@ -1672,6 +1673,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt ul li > a, #jqt fieldset.rounded > * > a:only-of-type {
     margin: -10px;
     padding: 10px;
+    overflow: hidden;
 }
 
 #jqt fieldset.rounded > a {

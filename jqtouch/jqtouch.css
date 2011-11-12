@@ -47,7 +47,7 @@ body {
 }
 
 #jqt > * {
-    -webkit-box-sizing: border-box;
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
     display: block;
     left: 0;
     overflow-x: hidden;
@@ -58,6 +58,10 @@ body {
     -webkit-box-orient: vertical;
     -webkit-box-pack: start;
     -webkit-box-align: stretch;
+}
+
+#jqt > * > * {
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
 }
 
 #jqt > .current {
@@ -98,12 +102,8 @@ body {
 
 #jqt > [section="aside"] {
     -webkit-backface-visibility: hidden;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
     right: 0;
-    /*
-    min-height: 100%;
-     */
 }
 
 @media only screen and (min-device-width: 768px) {
