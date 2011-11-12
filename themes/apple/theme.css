@@ -17,8 +17,6 @@ body {
 /* @group general */
 
 #jqt > div, #jqt > form {
-    -webkit-transform: translate3d(0,0,0);
-    -webkit-backface-visibility: hidden;
     background-color: rgb(197,204,211);
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAABCAIAAACdaSOZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABdJREFUeNpiPHrmCgMC/GNjYwNSAAEGADdNA3dnzPlQAAAAAElFTkSuQmCC);
     -webkit-user-select: ignore;
@@ -44,10 +42,10 @@ body {
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
 }
 
-#jqt > * .contentwrap, #jqt > * .touchscroll {
+#jqt > * .contentwrap {
     display: -webkit-box; display: -moz-box; display: box;
     -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
-    -webkit-box-pack: justify; -moz-box-pack: justify; box-pack: justify;
+    -webkit-box-pack: start; -moz-box-pack: start; box-pack: start;
     -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
     position: relative;
     -webkit-box-flex: 10; -moz-box-flex: 10; box-flex: 10;
@@ -59,12 +57,9 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-    
-}
-
 #jqt > * .contentwrap[title]::before,
 #jqt > * .content[title]::before {
-    /* position: absolute; */
+    position: absolute;
     display: block; position: relative;
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
     height: 22px; width: 100%;
@@ -180,8 +175,7 @@ body {
 
 #jqt > * > .navibar, #jqt > * .bar {
     display: -webkit-box; display: -moz-box; display: box;
-    /* why they are different? */
-    -webkit-box-flex: 0; -moz-box-flex: 10; box-flex: 10;
+    -webkit-box-flex: 0; -moz-box-flex: 0; box-flex: 0;
     -webkit-box-orient: horizontal; -moz-box-orient: horizontal; box-orient: horizontal;
 }
 

@@ -17,25 +17,20 @@
                 text-align: center;
                 background: #161618;
             }
-
             div#jqt #about p {
                 margin-bottom: 8px;
             }
-
             div#jqt #about a {
                 color: #fff;
                 font-weight: bold;
                 text-decoration: none;
             }
-
             .d-compass {
                 background-image: url(./image/compass_57px.png);
             }
-
             .d-icontact {
                 background-image: url(./image/iphonecontact_57px.png);
             }
-
             .buttonicon {
               position: relative;
               min-width: 30px;
@@ -44,25 +39,20 @@
               color: white;
               -webkit-mask-repeat: no-repeat;
             }
-
             .d-refresh {
               -webkit-mask-image: url(./image/01-refresh.png);
               -webkit-mask-position: 3px 1px;
             }
-
             .d-config {
               -webkit-mask-image: url(./image/20-gear2.png);
               -webkit-mask-position: 1px 1px;
             }
-
             .w-gmail {
               background-image: url(./image/gmaillogo_29px.png);
             }
-
             .p-photographer {
                 background-image: url(./image/00433945.png);
             }
-
             .p-painter {
                 background-image: url(./image/00434881.png);
             }
@@ -172,7 +162,7 @@
                     <h1>AJAX</h1>
                     <a class="back" href="#home" section="full">Home</a>
                 </div>
-                <div class="touchscroll" id="ajaxpane">
+                <div class="view" id="ajaxpane">
                   <!-- extra div here for workaround bug in ul css causes the last li to fill the page -->
                   <ul class="rounded">
                       <li class="arrow"><a href="#ajax_post">POST Form Example</a></li>
@@ -187,7 +177,7 @@
                     <h1>Animations</h1>
                     <a class="back" href="#" section="full">Home</a>
                 </div>
-                <div class="touchscroll" id="animationspane">
+                <div class="view" id="animationspane">
                   <ul class="rounded">
                     <li><a href="#animdemo">Slide</a></li>
                     <li><a class="slideup" href="#animdemo">Slide Up</a></li>
@@ -199,9 +189,9 @@
                     <li><a class="cube" href="#animdemo">Cube</a></li>
                     <li><a href="#reversed">Reverse animations&hellip;</a></li>
                   </ul>
-                  <div class="info">
-                      Custom animations are also <a href="http://code.google.com/p/jqtouch/wiki/Animations" target="_blank">easy to write</a>. <br />View the source in <code>demos/customanimation</code> to see how.
-                  </div>
+                </div>
+                <div class="info">
+                    Custom animations are also <a href="http://code.google.com/p/jqtouch/wiki/Animations" target="_blank">easy to write</a>. <br />View the source in <code>demos/customanimation</code> to see how.
                 </div>
             </div>
             <div id="animdemo">
@@ -215,7 +205,7 @@
                     <h1>Buttons!</h1>
                     <a href="#" class="back">Home</a>
                 </div>
-                <div class="touchscroll" id="buttonspane">
+                <div class="view" id="buttonspane">
                     <a href="#" class="whiteButton">White</a>
                     <br />
                     <a href="#" class="grayButton">Gray</a>
@@ -297,7 +287,7 @@
                     <h1>Events</h1>
                     <a class="back" href="#home" section="full">Home</a>
                 </div>
-                <div class="touchscroll" id="callbackspane">
+                <div class="view" id="callbackspane">
                   <ul class="rounded">
                       <li id="orient">Orientation: <strong>profile</strong></li>
                       <li class="arrow"><a href="#pageevents">Page events</a></li>
@@ -325,7 +315,7 @@
                     <h1>Edge to Edge</h1>
                     <a href="#" class="back">Back</a>
                 </div>
-                <div class="touchscroll" id="edgetoedgepane">
+                <div class="view" id="edgetoedgepane">
                   <ul class="edgetoedge childrenactivable">
                       <li class="sep">F</li>
                       <li><a href="#">Flintstone, <em>Fred</em></a></li>
@@ -348,7 +338,7 @@
                     <h1>Edge to Edge (w/ icon)</h1>
                     <a href="#" class="back">Back</a>
                 </div>
-                <div class="touchscroll" id="contactpane">
+                <div class="view" id="contactpane">
                     <ul class="edgetoedge childrenactivable">
                         <li class="sep">F</li>
                         <li><a href="#" class="icon p-painter">Flintstone, <em>Fred</em></a></li>
@@ -371,7 +361,7 @@
                     <h1>Rounded</h1>
                     <a href="#" class="back">Back</a>
                 </div>
-                <div class="touchscroll" id="roundedpane">
+                <div class="view" id="roundedpane">
                     <ul class="rounded">
                         <li class="arrow"><a class="p-painter icon" href="#">
                           Title<p>Description or details</p>
@@ -403,7 +393,7 @@
                     <h1>Rounded</h1>
                     <a href="#" class="back">Back</a>
                 </div>
-                <div class="touchscroll" id="mailpane">
+                <div class="view" id="mailpane">
                     <ul class="mail">
                         <li class="arrow unread">David Kaneda<span class="date">Today</span><span class="title autotitle">Re: jQTouch Alpha 2</span> <p>This is another span</p></li>
                         <li class="arrow unread">John Doe<span class="date">Today</span><span class="title autotitle">Your account</span>
@@ -450,7 +440,7 @@
                     <h1>Forms</h1>
                     <a href="#" class="back">Back</a>
                 </div>
-                <div class="touchscroll" id="formspane">
+                <div class="view" id="formspane">
                   <h2>Please fill the form:</h2>
                   <ul class="edit rounded">
                     <li><label for="some_text">Name</label><input type="text" name="name" placeholder="Text" id="some_text" /></li>
@@ -492,7 +482,7 @@
                     <a href="#" class="back">Cancel</a>
                     <input type="submit" value="Done" />
                 </div>
-                <div class="touchscroll">
+                <div class="view">
                     <ul class="rounded">
                         <li class="arrow"><a href="#customizableradio"><label class="tight">Customizable Radio</label><input type="text" data-sourcename="reviewinterval" name="starts" value="" id="startendpane-input-starts" readonly /></a></li>
                         <input type="hidden" data-sourcename="reviewformat" name="reviewformat" value="" />
@@ -575,7 +565,7 @@
                 <h1>Search Combo</h1>
                 <a href="#" class="back">Back</a>
               </div>
-              <div class="touchscroll" id="searchscroll">
+              <div class="view" id="searchscroll">
                 <div class="searchbox">
                   <div class="bar inputbar">
                     <input type="search" value="hello world" placeholder="Search"/>
@@ -623,7 +613,7 @@
                     <h1>jQTouch</h1>
                     <a class="button slideup tog" id="infoButton" href="#about">About</a>
                 </div>
-                <form class="touchscroll" id="homepane">
+                <form class="view" id="homepane">
                   <ul class="rounded">
                       <li class="arrow"><a href="#ui">User Interface<small class="counter">13</small></a></li>
                       <li class="arrow"><a href="#dialogs">Dialogs<small class="counter">2</small></a></li>
@@ -654,7 +644,7 @@
                     <h1>Metal Lists</h1>
                     <a href="#" class="back">Back</a>
                 </div>
-                <form class="touchscroll" id="metalpane">
+                <form class="view" id="metalpane">
                   <ul class="metal">
                       <li class="arrow"><a href="#"><small>AM</small> 9:40 <em>Buenos Aires</em></a></li>
                       <li class="arrow"><a href="#"><small>PM</small> 19:40 <em>Singapur</em></a></li>
@@ -756,7 +746,7 @@
                     <h1>Reversed</h1>
                     <a href="#" class="back">Animations</a>
                 </div>
-                <form class="touchscroll" id="reversedpane">
+                <form class="view" id="reversedpane">
                   <ul class="rounded">
                       <li><a class="reverse" href="#animdemo">Slide</a></li>
                       <li><a class="reverse slideup" href="#animdemo">Slide Up</a></li>
@@ -777,7 +767,7 @@
                     <h1>UI Demos</h1>
                     <a class="back" href="#" section="full">Home</a>
                 </div>
-                <form class="touchscroll" id="uipane">
+                <form class="view" id="uipane">
                   <h2>Lists</h2>
                   <ul class="rounded">
                       <li class="arrow"><a href="#edge">Edge to Edge</a></li>
