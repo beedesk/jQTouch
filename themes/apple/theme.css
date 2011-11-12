@@ -1844,9 +1844,9 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt > * ul.rounded > li.active,
 #jqt > * ul.plastic > li.active,
 #jqt > * ul.metal > li.active {
-    background-color: #4286F5;
     background-image: none, none, -webkit-gradient(linear, left top, left bottom, from(#4286f5), to(#194fdb)) !important;
     background-image: none, none, -moz-linear-gradient(top, #4286f5, #194fdb) !important;
+    /* background-color: #4286F5; */
 }
 
 #jqt ul li.arrow.active, #jqt ul li.forward.active, #jqt > * fieldset.rounded > a.active {
