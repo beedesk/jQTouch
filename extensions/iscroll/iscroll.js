@@ -50,24 +50,32 @@ $(document).ready(function(){
       // no need to use iScroll
       return;
     }
+    if ($('#jqt').hasClass('unfixed')) {
+      return;
+    }
 
     $("#jqt").find(".view").each(function(i, view) {
+      var options, specifics;
       var $view, $wrapper;
 
       $view = $(view);
-      $view.addClass('content');
+      if ($view.closest("#jqt > .unfixed").length > 0) {
+        return;
+      }
+      
+      $view.addClass('');
       $view.wrap('<div class="contentwrap">');        
       $wrapper = $view.parent();
 
       var data = $wrapper.data(KEY_ISCROLL_OBJ);
       if (data === undefined || data === null) {
         var scroll;
-        var options = {
-            hideScrollbar: true,
+        options = {
+            onBeforeScrollStart: null, /* do not prevent default */
+            hideScrollbar: true
         };
         if ($wrapper.hasClass("scrollrefresh")) {
-          options = {
-            hideScrollbar: true,
+          specifics = {
             pullToRefresh: "down",
             onPullDown: function () {
               setTimeout(function () {
@@ -85,13 +93,13 @@ $(document).ready(function(){
             }
           };
         } else if ($wrapper.hasClass("scrollzoompane")) {
-          options = {
-            hideScrollbar: true,
+          specifics = {
             zoom:true
           };
           console.warn("special scroll: " + "scrollzoompane");
         }
 
+        for (i in specifics) options[i] = specifics[i];
         scroll = new iScroll($wrapper[0], options);
         $wrapper.data(KEY_ISCROLL_OBJ, scroll);
         scroll.refresh();

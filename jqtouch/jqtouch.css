@@ -68,7 +68,7 @@ body {
     z-index: 10;
 }
 
-#jqt > :not(.current) {
+#jqt > :not(.current):not(.smokedglass):not(.clearglass) {
     display: none;
 }
 
@@ -82,12 +82,11 @@ body {
     display: -webkit-box; display: box;
 }
 
-#jqt:not(.unfixed) > :not(.unfixed):not(.current) {
+#jqt:not(.unfixed) > :not(.unfixed):not(.current):not(.smokedglass):not(.clearglass) {
     display: none;
 }
 
-#jqt:not(.unfixed) > :not(.unfixed) > .view,
-#jqt:not(.unfixed) > :not(.unfixed) > :only-child {
+#jqt:not(.unfixed) > :not(.unfixed) > .view {
     position: relative;
     display: -webkit-box; display: -moz-box; display: box;
     -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
@@ -152,11 +151,6 @@ only screen and (min-device-width: 1024px) {
 
     #jqt.splitscreen > [section="aside"] {
     }
-}
-
-#jqt > .current, #jqt > .smokedglass, #jqt > .clearglass {
-    display: block;
-    display: -webkit-box; display: -moz-box; display: box;
 }
 
 #jqt > .current.alphapage .hideonalpha,

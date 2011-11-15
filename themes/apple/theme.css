@@ -61,6 +61,12 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
+/* hack !! */
+#jqt > * .contentwrap > :first-child {
+    padding-top: 1px;
+    margin-top: -1px;
+}
+
 #jqt > * .contentwrap[title]::before,
 #jqt > * .content[title]::before {
     position: absolute;
@@ -124,7 +130,8 @@ body {
 }
 
 #jqt > * > div:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split):not(.view),
-#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split):not(.view) {
+#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split):not(.view),
+#jqt > * > .quickwrap {
     /* back-compat worthwhile? */
     top: 0; left: 0; right: 0;
     /* min-height: 100%; */
