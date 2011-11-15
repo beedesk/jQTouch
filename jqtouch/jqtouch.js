@@ -86,6 +86,7 @@
             inputguard: true,
             inputtypes: ["input[type='text']", "input[type='password']", "input[type='tel']", "input[type='number']", "input[type='search']", "input[type='email']", "input[type='url']", "select", "textarea"],
             useFastTouch: false, // Experimental.
+            useTouchScroll: true,
 
             // animation selectors
             notransitionSelector: '',
@@ -965,10 +966,37 @@
             return true;
         }
 
+        function parseVersionString(str, delimit) {
+            if (typeof(str) != 'string') {
+              return {major: 0, minor: 0, patch: 0};
+            }
+            delimit = delimit || '.';
+            var x = str.split(delimit);
+            // parse from string or default to 0 if can't parse
+            var maj = parseInt(x[0]) || 0;
+            var min = parseInt(x[1]) || 0;
+            var pat = parseInt(x[2]) || 0;
+            return {major: maj, minor: min, patch: pat};
+        };
+      
         /* -- tag for code merge --
         function supportForAnimationEvents() {
         function supportForCssMatrix() {
         function supportForTouchEvents() {
+        */
+        function supportForTouchScroll() {
+            var reg = /OS (5(_\d+)*) like Mac OS X/i;
+            
+            var arrays, version;
+            
+            version = {major: 0, minor: 0, patch: 0};
+            arrays = reg.exec(navigator.userAgent);
+            if (arrays && arrays.length > 1) {
+                version = parseVersionString(arrays[1], '_');
+            }
+            return version.major >= 5;
+        };
+        /*
         function supportForTransform3d() {
         };
         */
@@ -1310,8 +1338,8 @@
             function updateChanges(e) {
                 var point = e.originalEvent;
                 var first = $.support.touch? point.changedTouches[0]: point;
-                deltaX = first.clientX - startX;
-                deltaY = first.clientY - startY;
+                deltaX = first.pageX - startX;
+                deltaY = first.pageY - startY;
                 deltaT = (new Date).getTime() - startTime;
                 var absElOffset = $el.offset();
                 elX = absElOffset.left - elStartX;
@@ -1324,8 +1352,8 @@
                 inprogress = true, swipped = false, tapped = false,
                 moved = false, timed = false, pressed = false;
                 point = e.originalEvent;
-                startX = $.support.touch? point.changedTouches[0].clientX: point.clientX;
-                startY = $.support.touch? point.changedTouches[0].clientY: point.clientY;
+                startX = $.support.touch? point.changedTouches[0].pageX: point.pageX;
+                startY = $.support.touch? point.changedTouches[0].pageY: point.pageY;
                 startTime = (new Date).getTime();
                 endX = null, endY = null, endTime = null;
                 deltaX = 0;
@@ -1440,6 +1468,7 @@
             $.support.touch = (typeof Touch != "undefined");
             $.support.WebKitAnimationEvent = (typeof WebKitTransitionEvent != "undefined");
             $.support.wide = (window.screen.width >= 768);
+            $.support.touchScroll =  supportForTouchScroll();
 
             // Public jQuery Fns
             $.fn.isExternalLink = function() {
@@ -1507,6 +1536,11 @@
                 console.warn('Could not find an element with the id "jqt", so the body id has been set to "jqt". This might cause problems, so you should prolly wrap your panels in a div with the id "jqt".');
                 $body = $('body').attr('id', 'jqt');
             }
+            /*
+            if (!$.support.touchScroll || !jQTSettings.useTouchScroll) {
+                $body.addClass('unfixed');
+            }
+            */
 
             $body.bind('tap', tapHandler);
             $(allSelectors.join(', ')).css('-webkit-touch-callout', 'none');
