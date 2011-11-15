@@ -312,8 +312,6 @@ iScroll.prototype = {
   },
   
   _scrollbar: function (dir) {
-    console.warn("scrollbar called.");
-
     var that = this,
       doc = document,
       bar;
@@ -427,9 +425,6 @@ iScroll.prototype = {
     that[dir + 'ScrollbarWrapper'].style.opacity = hidden && that.options.hideScrollbar ? '0' : '1';
     that[dir + 'ScrollbarIndicator'].style[vendor + 'Transform'] = trnOpen + (dir == 'h' ? pos + 'px,0' : '0,' + pos + 'px') + trnClose;
     
-    console.warn("hide? " + that.options.hideScrollbar);
-
-
   },
   
   _start: function (e) {
