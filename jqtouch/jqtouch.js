@@ -1193,7 +1193,16 @@
                           search[name] = $input.val();
                         }
                         var $target = $(hash).data('referrer', $el).find('input[data-sourcename="' + name + '"], input[name="' + name + '"], textarea[data-sourcename="' + name + '"], textarea[name="' + name + '"]').first();
-                        $target.val($input.val());
+                        var $radio = $target.filter('[type="radio"]');
+                        if ($radio.length === 0 || !!$input.val()) {
+                          $target.val($input.val());
+                        } else {
+                          if (!!$target.prop) { // jQuery 1.6+
+                            $target.prop('checked', false);
+                          } else {
+                            $target.attr('checked', false);
+                          }
+                        }
                       });
                     }
 
