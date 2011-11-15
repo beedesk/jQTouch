@@ -64,6 +64,7 @@
             animations=[],
             modifiers=[],
             splitscreenmode=false,
+            workaroundFlexboxJump=true,
             hairExtensions='';
 
         var defaults = {
@@ -86,6 +87,7 @@
             inputguard: true,
             inputtypes: ["input[type='text']", "input[type='password']", "input[type='tel']", "input[type='number']", "input[type='search']", "input[type='email']", "input[type='url']", "select", "textarea"],
             useFastTouch: false, // Experimental.
+            useTouchScroll: true,
 
             // animation selectors
             notransitionSelector: '',
@@ -965,14 +967,65 @@
             return true;
         }
 
+        function parseVersionString(str, delimit) {
+            if (typeof(str) != 'string') {
+              return {major: 0, minor: 0, patch: 0};
+            }
+            delimit = delimit || '.';
+            var x = str.split(delimit);
+            // parse from string or default to 0 if can't parse
+            var maj = parseInt(x[0]) || 0;
+            var min = parseInt(x[1]) || 0;
+            var pat = parseInt(x[2]) || 0;
+            return {major: maj, minor: min, patch: pat};
+        };
+      
         /* -- tag for code merge --
         function supportForAnimationEvents() {
         function supportForCssMatrix() {
         function supportForTouchEvents() {
-        function supportForTransform3d() {
-        };
         */
-
+        function supportForTouchScroll() {
+            var reg = /OS (5(_\d+)*) like Mac OS X/i;
+            
+            var arrays, version;
+            
+            version = {major: 0, minor: 0, patch: 0};
+            arrays = reg.exec(navigator.userAgent);
+            if (arrays && arrays.length > 1) {
+                version = parseVersionString(arrays[1], '_');
+            }
+            return version.major >= 5;
+        };
+        function supportForTransform3d() {
+            _debug();
+  
+            var head, body, style, div, result;
+  
+            head = document.getElementsByTagName('head')[0];
+            body = document.body;
+  
+            style = document.createElement('style');
+            style.textContent = '@media (transform-3d),(-o-transform-3d),(-moz-transform-3d),(-ms-transform-3d),(-webkit-transform-3d),(modernizr){#jqtTestFor3dSupport{height:3px}}';
+  
+            div = document.createElement('div');
+            div.id = 'jqtTestFor3dSupport';
+  
+            // Add to the page
+            head.appendChild(style);
+            body.appendChild(div);
+  
+            // Check the result
+            result = div.offsetHeight === 3;
+  
+            // Clean up
+            style.parentNode.removeChild(style);
+            div.parentNode.removeChild(div);
+  
+            // Pass back result
+            // _debug('Support for 3d transforms: ' + result);
+            return result;
+        };
         function clickHandler(e) {
             _debug();
 
@@ -1138,7 +1191,7 @@
 
                     if ($el.is(jQTSettings.dialogSelector) || $el.find(jQTSettings.dialogSelector).length > 0) {
                       pageback = function(returns) {
-                        console.warn("pageback is called. returns: " + JSON.stringify(returns));
+                        //console.warn("pageback is called. returns: " + JSON.stringify(returns));
 
                         var $page = $(this);
                         if (returns) {
@@ -1149,7 +1202,7 @@
                               // sloppy workaround for the simpliest
                               var $item = $el.find('input[value], textarea[value]').eq(i);
                             }
-                            console.warn("setting value for item: " + $item.attr("name"));
+                            //console.warn("setting value for item: " + $item.attr("name"));
                             $item.val(item.value);
                             if ($item.attr('type') === 'radio' || $item.attr('type') === 'checkbox') {
                               $item.attr('checked', true);
@@ -1165,7 +1218,16 @@
                           search[name] = $input.val();
                         }
                         var $target = $(hash).data('referrer', $el).find('input[data-sourcename="' + name + '"], input[name="' + name + '"], textarea[data-sourcename="' + name + '"], textarea[name="' + name + '"]').first();
-                        $target.val($input.val());
+                        var $radio = $target.filter('[type="radio"]');
+                        if ($radio.length === 0 || !!$input.val()) {
+                          $target.val($input.val());
+                        } else {
+                          if (!!$target.prop) { // jQuery 1.6+
+                            $target.prop('checked', false);
+                          } else {
+                            $target.attr('checked', false);
+                          }
+                        }
                       });
                     }
 
@@ -1310,8 +1372,8 @@
             function updateChanges(e) {
                 var point = e.originalEvent;
                 var first = $.support.touch? point.changedTouches[0]: point;
-                deltaX = first.clientX - startX;
-                deltaY = first.clientY - startY;
+                deltaX = first.pageX - startX;
+                deltaY = first.pageY - startY;
                 deltaT = (new Date).getTime() - startTime;
                 var absElOffset = $el.offset();
                 elX = absElOffset.left - elStartX;
@@ -1324,8 +1386,8 @@
                 inprogress = true, swipped = false, tapped = false,
                 moved = false, timed = false, pressed = false;
                 point = e.originalEvent;
-                startX = $.support.touch? point.changedTouches[0].clientX: point.clientX;
-                startY = $.support.touch? point.changedTouches[0].clientY: point.clientY;
+                startX = $.support.touch? point.changedTouches[0].pageX: point.pageX;
+                startY = $.support.touch? point.changedTouches[0].pageY: point.pageY;
                 startTime = (new Date).getTime();
                 endX = null, endY = null, endTime = null;
                 deltaX = 0;
@@ -1440,6 +1502,8 @@
             $.support.touch = (typeof Touch != "undefined");
             $.support.WebKitAnimationEvent = (typeof WebKitTransitionEvent != "undefined");
             $.support.wide = (window.screen.width >= 768);
+            $.support.transform3d = supportForTransform3d();
+            $.support.touchScroll =  supportForTouchScroll();
 
             // Public jQuery Fns
             $.fn.isExternalLink = function() {
@@ -1507,6 +1571,45 @@
                 console.warn('Could not find an element with the id "jqt", so the body id has been set to "jqt". This might cause problems, so you should prolly wrap your panels in a div with the id "jqt".');
                 $body = $('body').attr('id', 'jqt');
             }
+            
+            // Add some specific css if need be
+            if ($.support.transform3d) {
+                $body.addClass('supports3d');
+            }
+            /*
+            if (!$.support.touchScroll || !jQTSettings.useTouchScroll) {
+                $body.addClass('unfixed');
+            }
+            */
+
+            // workaround flexible-box jump issue: 
+            // https://bugs.webkit.org/show_bug.cgi?id=46657
+            if (jQTSettings.workaroundFlexboxJump) {
+              var afjTimer;
+
+              function resumeFlex($page) {
+                clearTimeout(afjTimer); 
+                $page.find('.view').each(function (i, view) {
+                  $(view).css({'height': undefined});
+                });
+                afjTimer = setTimeout(function() {
+                  $page.find('.view').each(function (i, view) {
+                    var height = $(view).height(); 
+                    $(view).css({'height': ($(view).height() + 'px')});
+                  });                  
+                }, 75);
+              }
+              $("#jqt").delegate('#jqt > *', 'pageAnimationEnd', function(event, info) {
+                if (info.direction == 'in') {
+                  resumeFlex($(this));
+                }
+              });
+              $(window).resize(function() {
+                $('#jqt > .current').each(function(i, one) {
+                  resumeFlex($(one));
+                });
+              });
+            }
 
             $body.bind('tap', tapHandler);
             $(allSelectors.join(', ')).css('-webkit-touch-callout', 'none');
@@ -1547,7 +1650,7 @@
                     }
                 });
             }
-
+            
             for (var i=0, len=jQTSettings.engageable.length; i<len; i++) {
               var item = jQTSettings.engageable[i];
               $(item.query).each(function(e, gear) {
