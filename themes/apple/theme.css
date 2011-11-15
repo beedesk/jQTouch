@@ -40,6 +40,9 @@ body {
 
 #jqt > * > * {
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+}
+
+#jqt > * > div, #jqt > * > ul, #jqt > * > ol, #jqt > * > form {
     width: 100%;
 }
 
