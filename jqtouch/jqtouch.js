@@ -1550,6 +1550,35 @@
                 $body.addClass('unfixed');
             }
             */
+            
+            // workaround flexible-box jump issue: 
+            // https://bugs.webkit.org/show_bug.cgi?id=46657
+            if (true) {
+              var afjTimer;
+
+              function resumeFlex($page) {
+                clearTimeout(afjTimer); 
+                $page.find('.view').each(function (i, view) {
+                  $(view).css({'height': undefined});
+                });
+                afjTimer = setTimeout(function() {
+                  $page.find('.view').each(function (i, view) {
+                    var height = $(view).height(); 
+                    $(view).css({'height': ($(view).height() + 'px')});
+                  });                  
+                }, 75);
+              }
+              $("#jqt").delegate('#jqt > *', 'pageAnimationEnd', function(event, info) {
+                if (info.direction == 'in') {
+                  resumeFlex($(this));
+                }
+              });
+              $(window).resize(function() {
+                $('#jqt > .current').each(function(i, one) {
+                  resumeFlex($(one));
+                });
+              });
+            }
 
             $body.bind('tap', tapHandler);
             $(allSelectors.join(', ')).css('-webkit-touch-callout', 'none');
@@ -1590,7 +1619,7 @@
                     }
                 });
             }
-
+            
             for (var i=0, len=jQTSettings.engageable.length; i<len; i++) {
               var item = jQTSettings.engageable[i];
               $(item.query).each(function(e, gear) {
