@@ -17,6 +17,33 @@
 (function(){
 
 $(document).ready(function(){
+  
+  function parseVersionString(str, delimit) {
+    if (typeof(str) != 'string') {
+      return {major: 0, minor: 0, patch: 0};
+    }
+    delimit = delimit || '.';
+    var x = str.split(delimit);
+    // parse from string or default to 0 if can't parse
+    var maj = parseInt(x[0]) || 0;
+    var min = parseInt(x[1]) || 0;
+    var pat = parseInt(x[2]) || 0;
+    return {major: maj, minor: min, patch: pat};
+  };
+
+  function supportForTouchScroll() {
+    var reg = /OS (5(_\d+)*) like Mac OS X/i;
+    
+    var arrays, version;
+    
+    version = {major: 0, minor: 0, patch: 0};
+    arrays = reg.exec(navigator.userAgent);
+    if (arrays && arrays.length > 1) {
+        version = parseVersionString(arrays[1], '_');
+    }
+    return version.major >= 5;
+  };
+
   // initialize iscroll
   var KEY_ISCROLL_OBJ = 'iscroll_object';
   function refreshScroll($pane) {
@@ -31,45 +58,57 @@ $(document).ready(function(){
 
   var generatedRows = 0;
   function loaded() {
-    $("#jqt").children().each(function (i, pane) {
-      $(pane).find('.s-scrollwrapper, .s-innerscrollwrapper').each(function (i, wrap) {
-        var $wrapper = $(wrap);
 
-        var data = $wrapper.data(KEY_ISCROLL_OBJ);
-        if (data === undefined || data === null) {
-          var scroll;
-          var options = {};
-          if ($wrapper.hasClass("scrollrefresh")) {
-            options = {
-              pullToRefresh: "down",
-              onPullDown: function () {
-                setTimeout(function () {
-                  var el, li, i;
-                  el = $("#z-taskdue")[0];
+    if (supportForTouchScroll()) {
+      // no need to use iScroll
+      return;
+    }
 
-                  for (i=0; i<3; i++) {
-                    li = document.createElement('li');
-                    li.innerText = 'Generated row ' + (++generatedRows);
-                    el.insertBefore(li, el.childNodes[0]);
-                  }
+    $("#jqt").find(".view").each(function(i, pane) {
+      var $pane, $wrapper;
 
-                  scroll.refresh(); // IMPORTANT!
-                }, 1000); // <-- Simulate network congestion, remove setTimeout from production!
-              }
-            };
-          } else if ($wrapper.hasClass("scrollzoompane")) {
-            options = {
-              zoom:true
-            };
-            console.warn("special scroll: " + "scrollzoompane");
-          }
+      $pane = $(pane);
+      $pane.addClass('content');
+      $pane.wrap('<div class="contentwrap">');        
+      $wrapper = $pane.parent();
 
-          scroll = new iScroll(wrap, options);
-          $wrapper.data(KEY_ISCROLL_OBJ, scroll);
-          scroll.refresh();
+      $pane.css({'overflow-y': 'hidden'});
+
+      var data = $wrapper.data(KEY_ISCROLL_OBJ);
+      if (data === undefined || data === null) {
+        var scroll;
+        var options = {};
+        if ($wrapper.hasClass("scrollrefresh")) {
+          options = {
+            pullToRefresh: "down",
+            onPullDown: function () {
+              setTimeout(function () {
+                var el, li, i;
+                el = $("#z-taskdue")[0];
+
+                for (i=0; i<3; i++) {
+                  li = document.createElement('li');
+                  li.innerText = 'Generated row ' + (++generatedRows);
+                  el.insertBefore(li, el.childNodes[0]);
+                }
+
+                scroll.refresh(); // IMPORTANT!
+              }, 1000); // <-- Simulate network congestion, remove setTimeout from production!
+            }
+          };
+        } else if ($wrapper.hasClass("scrollzoompane")) {
+          options = {
+            zoom:true
+          };
+          console.warn("special scroll: " + "scrollzoompane");
         }
-      });
-      $(pane).bind('pageAnimationEnd', function(event, info) {
+
+        scroll = new iScroll($wrapper[0], options);
+        $wrapper.data(KEY_ISCROLL_OBJ, scroll);
+        scroll.refresh();
+      }
+
+      $pane.bind('pageAnimationEnd', function(event, info) {
         if (info.direction == 'in') {
           refreshScroll($(this));
         }
@@ -81,8 +120,6 @@ $(document).ready(function(){
       });
     });
   }
-
-  loaded();
 
   setTimeout(function() {
     loaded();
