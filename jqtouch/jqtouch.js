@@ -64,6 +64,7 @@
             animations=[],
             modifiers=[],
             splitscreenmode=false,
+            workaroundFlexboxJump=true,
             hairExtensions='';
 
         var defaults = {
@@ -996,11 +997,35 @@
             }
             return version.major >= 5;
         };
-        /*
         function supportForTransform3d() {
+            _debug();
+  
+            var head, body, style, div, result;
+  
+            head = document.getElementsByTagName('head')[0];
+            body = document.body;
+  
+            style = document.createElement('style');
+            style.textContent = '@media (transform-3d),(-o-transform-3d),(-moz-transform-3d),(-ms-transform-3d),(-webkit-transform-3d),(modernizr){#jqtTestFor3dSupport{height:3px}}';
+  
+            div = document.createElement('div');
+            div.id = 'jqtTestFor3dSupport';
+  
+            // Add to the page
+            head.appendChild(style);
+            body.appendChild(div);
+  
+            // Check the result
+            result = div.offsetHeight === 3;
+  
+            // Clean up
+            style.parentNode.removeChild(style);
+            div.parentNode.removeChild(div);
+  
+            // Pass back result
+            // _debug('Support for 3d transforms: ' + result);
+            return result;
         };
-        */
-
         function clickHandler(e) {
             _debug();
 
@@ -1477,6 +1502,7 @@
             $.support.touch = (typeof Touch != "undefined");
             $.support.WebKitAnimationEvent = (typeof WebKitTransitionEvent != "undefined");
             $.support.wide = (window.screen.width >= 768);
+            $.support.transform3d = supportForTransform3d();
             $.support.touchScroll =  supportForTouchScroll();
 
             // Public jQuery Fns
@@ -1545,15 +1571,20 @@
                 console.warn('Could not find an element with the id "jqt", so the body id has been set to "jqt". This might cause problems, so you should prolly wrap your panels in a div with the id "jqt".');
                 $body = $('body').attr('id', 'jqt');
             }
+            
+            // Add some specific css if need be
+            if ($.support.transform3d) {
+                $body.addClass('supports3d');
+            }
             /*
             if (!$.support.touchScroll || !jQTSettings.useTouchScroll) {
                 $body.addClass('unfixed');
             }
             */
-            
+
             // workaround flexible-box jump issue: 
             // https://bugs.webkit.org/show_bug.cgi?id=46657
-            if (true) {
+            if (jQTSettings.workaroundFlexboxJump) {
               var afjTimer;
 
               function resumeFlex($page) {
