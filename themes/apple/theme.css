@@ -17,8 +17,6 @@ body {
 /* @group general */
 
 #jqt > div, #jqt > form {
-    -webkit-transform: translate3d(0,0,0);
-    -webkit-backface-visibility: hidden;
     background-color: rgb(197,204,211);
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAABCAIAAACdaSOZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABdJREFUeNpiPHrmCgMC/GNjYwNSAAEGADdNA3dnzPlQAAAAAElFTkSuQmCC);
     -webkit-user-select: ignore;
@@ -26,7 +24,7 @@ body {
     -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
     -webkit-box-pack: start; -moz-box-pack: start; box-pack: start;
     -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
-    min-height: 100%;
+    height: 100%;
 }
 
 #jqt > * > h2 {
@@ -44,23 +42,37 @@ body {
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
 }
 
+#jqt > * > div, #jqt > * > ul, #jqt > * > ol, #jqt > * > form {
+    width: 100%;
+}
+
 #jqt > * .contentwrap {
     display: -webkit-box; display: -moz-box; display: box;
     -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
-    -webkit-box-pack: justify; -moz-box-pack: justify; box-pack: justify;
+    -webkit-box-pack: start; -moz-box-pack: start; box-pack: start;
     -webkit-box-align: stretch; -moz-box-align: stretch; box-align: stretch;
     position: relative;
     -webkit-box-flex: 10; -moz-box-flex: 10; box-flex: 10;
-    min-height: 100%;
     bottom: 0; left: 0; right: 0;
     margin: 0px; margin-top: 0px;
     padding-top: 0px;
     overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* hack !! */
+#jqt > * .contentwrap > .view {
+    padding-top: 1px;
+    margin-top: -1px;    
+    padding-bottom: 1px;
+    margin-bottom: -1px;
+
 }
 
 #jqt > * .contentwrap[title]::before,
 #jqt > * .content[title]::before {
-    /* position: absolute; */
+    position: absolute;
     display: block; position: relative;
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
     height: 22px; width: 100%;
@@ -120,8 +132,9 @@ body {
     }
 }
 
-#jqt > * > div:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split),
-#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split) {
+#jqt > * > div:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split):not(.view),
+#jqt > * > form:not(.contentwrap):not(.navibar):not(.toolbar):not(.bar):not(.info):not(.choicefloat):not(.spinnerfloat):not(.sw-slots-wrapper):not(.split):not(.view),
+#jqt > * > .quickwrap {
     /* back-compat worthwhile? */
     top: 0; left: 0; right: 0;
     /* min-height: 100%; */
@@ -140,7 +153,7 @@ body {
 }
 
 #jqt > * .contentwrap > .content,
-#jqt > * .contentwrap > :first-child:not(.noncontent):not(.split) {
+#jqt > * .contentwrap > :first-child:not(.noncontent):not(.split):not(.view) {
     position: absolute;
     display: block;
     top: 0; left: 0; right: 0;
@@ -176,8 +189,7 @@ body {
 
 #jqt > * > .navibar, #jqt > * .bar {
     display: -webkit-box; display: -moz-box; display: box;
-    /* why they are different? */
-    -webkit-box-flex: 0; -moz-box-flex: 10; box-flex: 10;
+    -webkit-box-flex: 0; -moz-box-flex: 0; box-flex: 0;
     -webkit-box-orient: horizontal; -moz-box-orient: horizontal; box-orient: horizontal;
 }
 
@@ -1663,6 +1675,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
     padding: 10px;
     line-height: 23px;
     -webkit-transform: translate3d(0,0,0); /* expensive way to avoid flickr */
+    overflow: hidden;
     min-height: 44px;
 }
 
@@ -1674,6 +1687,7 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt ul li > a, #jqt fieldset.rounded > * > a:only-of-type {
     margin: -10px;
     padding: 10px;
+    overflow: hidden;
 }
 
 #jqt fieldset.rounded > a {
@@ -1844,9 +1858,9 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt > * ul.rounded > li.active,
 #jqt > * ul.plastic > li.active,
 #jqt > * ul.metal > li.active {
-    background-color: #4286F5;
     background-image: none, none, -webkit-gradient(linear, left top, left bottom, from(#4286f5), to(#194fdb)) !important;
     background-image: none, none, -moz-linear-gradient(top, #4286f5, #194fdb) !important;
+    /* background-color: #4286F5; */
 }
 
 #jqt ul li.arrow.active, #jqt ul li.forward.active, #jqt > * fieldset.rounded > a.active {
@@ -1988,9 +2002,10 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
     display: block;
 }
 
+/*
 #jqt ul.form li:hover {
     background-color: #fff;
-}
+}*/
 
 #jqt form {
     /* -webkit-box-shadow: inset 0 0 2px #444; */
@@ -2024,6 +2039,9 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt ul li input[type="password"],
 #jqt ul li input[type="tel"],
 #jqt ul li input[type="number"],
+#jqt ul li input[type="date"],
+#jqt ul li input[type="time"],
+#jqt ul li input[type="datetime"],
 #jqt ul li input[type="search"],
 #jqt ul li input[type="email"],
 #jqt ul li input[type="url"],
@@ -2046,6 +2064,9 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt ul li.selected input[type="password"],
 #jqt ul li.selected input[type="tel"],
 #jqt ul li.selected input[type="number"],
+#jqt ul li.selected input[type="date"],
+#jqt ul li.selected input[type="time"],
+#jqt ul li.selected input[type="datetime"],
 #jqt ul li.selected input[type="search"],
 #jqt ul li.selected input[type="email"],
 #jqt ul li.selected input[type="url"],
@@ -2059,6 +2080,9 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt ul li input[type="password"],
 #jqt ul li input[type="tel"],
 #jqt ul li input[type="number"],
+#jqt ul li input[type="date"],
+#jqt ul li input[type="time"],
+#jqt ul li input[type="datetime"],
 #jqt ul li input[type="search"],
 #jqt ul li input[type="email"],
 #jqt ul li input[type="url"],
@@ -2090,6 +2114,9 @@ div.spinner div.bar12 {-webkit-transform:rotate(330deg) translate(0, -142%); -we
 #jqt ul li input[type="password"],
 #jqt ul li input[type="tel"],
 #jqt ul li input[type="number"],
+#jqt ul li input[type="date"],
+#jqt ul li input[type="time"],
+#jqt ul li input[type="datetime"],
 #jqt ul li input[type="search"],
 #jqt ul li input[type="email"],
 #jqt ul li input[type="url"],
