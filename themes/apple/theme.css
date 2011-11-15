@@ -62,9 +62,12 @@ body {
 }
 
 /* hack !! */
-#jqt > * .contentwrap > :first-child {
+#jqt > * .contentwrap > .view {
     padding-top: 1px;
-    margin-top: -1px;
+    margin-top: -1px;    
+    padding-bottom: 1px;
+    margin-bottom: -1px;
+
 }
 
 #jqt > * .contentwrap[title]::before,
