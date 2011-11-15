@@ -5,6 +5,7 @@
  * -- Use iScroll to simulate webkit-overflow-scrolling 
  */
 $(document).ready(function(){
+  var KEY_ISCROLL_OBJ = 'iscroll_object';
   
   function parseVersionString(str, delimit) {
     if (typeof(str) != 'string') {
@@ -32,11 +33,9 @@ $(document).ready(function(){
     return version.major >= 5;
   };
 
-  // initialize iscroll
-  var KEY_ISCROLL_OBJ = 'iscroll_object';
-  function refreshScroll($pane) {
-    $pane.find('.s-scrollwrapper, .s-innerscrollwrapper').each(function (i, wrap) {
-      var $wrapper = $(wrap);
+  function refreshScroll($page) {
+    $page.find('.view').each(function (i, view) {
+      var $wrapper = $(view).parent();
       var scroll = $wrapper.data(KEY_ISCROLL_OBJ);
       if (scroll !== undefined && scroll !== null) {
         scroll.refresh();
@@ -52,20 +51,20 @@ $(document).ready(function(){
       return;
     }
 
-    $("#jqt").find(".view").each(function(i, pane) {
-      var $pane, $wrapper;
+    $("#jqt").find(".view").each(function(i, view) {
+      var $view, $wrapper;
 
-      $pane = $(pane);
-      $pane.addClass('content');
-      $pane.wrap('<div class="contentwrap">');        
-      $wrapper = $pane.parent();
-
-      $pane.css({'overflow-y': 'hidden'});
+      $view = $(view);
+      $view.addClass('content');
+      $view.wrap('<div class="contentwrap">');        
+      $wrapper = $view.parent();
 
       var data = $wrapper.data(KEY_ISCROLL_OBJ);
       if (data === undefined || data === null) {
         var scroll;
-        var options = {};
+        var options = {
+            hideScrollbar: true,
+        };
         if ($wrapper.hasClass("scrollrefresh")) {
           options = {
             hideScrollbar: true,
@@ -98,7 +97,7 @@ $(document).ready(function(){
         scroll.refresh();
       }
 
-      $pane.bind('pageAnimationEnd', function(event, info) {
+      $("#jqt > *").bind('pageAnimationEnd', function(event, info) {
         if (info.direction == 'in') {
           refreshScroll($(this));
         }
@@ -313,6 +312,8 @@ iScroll.prototype = {
   },
   
   _scrollbar: function (dir) {
+    console.warn("scrollbar called.");
+
     var that = this,
       doc = document,
       bar;
@@ -336,7 +337,7 @@ iScroll.prototype = {
       else bar.style.cssText = 'position:absolute;z-index:100;' + (dir == 'h' ? 'height:7px;bottom:1px;left:2px;right:' + (that.vScrollbar ? '7' : '2') + 'px' : 'width:7px;bottom:' + (that.hScrollbar ? '7' : '2') + 'px;top:2px;right:1px');
 
       bar.style.cssText += ';pointer-events:none;-' + vendor + '-transition-property:opacity;-' + vendor + '-transition-duration:' + (that.options.fadeScrollbar ? '350ms' : '0') + ';overflow:hidden;opacity:' + (that.options.hideScrollbar ? '0' : '1');
-
+      
       that.wrapper.appendChild(bar);
       that[dir + 'ScrollbarWrapper'] = bar;
 
@@ -425,6 +426,10 @@ iScroll.prototype = {
     that[dir + 'ScrollbarWrapper'].style[vendor + 'TransitionDelay'] = '0';
     that[dir + 'ScrollbarWrapper'].style.opacity = hidden && that.options.hideScrollbar ? '0' : '1';
     that[dir + 'ScrollbarIndicator'].style[vendor + 'Transform'] = trnOpen + (dir == 'h' ? pos + 'px,0' : '0,' + pos + 'px') + trnClose;
+    
+    console.warn("hide? " + that.options.hideScrollbar);
+
+
   },
   
   _start: function (e) {
