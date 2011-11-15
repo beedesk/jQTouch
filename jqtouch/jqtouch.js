@@ -64,7 +64,6 @@
             animations=[],
             modifiers=[],
             splitscreenmode=false,
-            workaroundFlexboxJump=true,
             hairExtensions='';
 
         var defaults = {
@@ -88,6 +87,7 @@
             inputtypes: ["input[type='text']", "input[type='password']", "input[type='tel']", "input[type='number']", "input[type='search']", "input[type='email']", "input[type='url']", "select", "textarea"],
             useFastTouch: false, // Experimental.
             useTouchScroll: true,
+            workaroundFlexboxJump: true,
 
             // animation selectors
             notransitionSelector: '',
