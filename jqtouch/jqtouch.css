@@ -20,7 +20,7 @@ body {
     bottom: 0;
     font-family: "Helvetica Neue", Helvetica;
     left: 0;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 0;
 }
@@ -59,10 +59,6 @@ body {
     -webkit-box-orient: vertical;
     -webkit-box-pack: start;
     -webkit-box-align: stretch;
-}
-
-#jqt > * > * {
-    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
 }
 
 #jqt > .current {
@@ -119,11 +115,6 @@ body {
         width: 448px;
         border-radius: 5px;
     }
-    /*
-    #jqt.splitscreen > .unfixed {
-        overflow-y: scroll;
-        height: 100%;
-    }*/
 
     #jqt.splitscreen > [section="aside"] {
         position: absolute;
@@ -168,6 +159,10 @@ only screen and (min-device-width: 1024px) {
 #jqt > .front {
     z-index: 100;
     -webkit-transform: translateZ(0.01px);
+}
+
+#jqt > .front, #jqt > .in, #jqt > .out {
+    position: fixed !important;
 }
 
 #jqt > * .missection {
