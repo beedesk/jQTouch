@@ -245,33 +245,40 @@ only screen and (min-device-width: 1024px) {
 
 #jqt .slideup.start {
     z-index: 10;
-    -webkit-transition-property: -webkit-transform, opacity;
+    -webkit-transition-property: -webkit-transform;
 }
-
-/*#jqt .sideup.in.start, .slideup.out.reverse {
-    z-index: 30;
-}
-
-#jqt .slideup.out.start, .slideup.in.reverse {
-    z-index: 10;
-}*/
 
 #jqt .slideup.in,  #jqt .slideup.out.reverse.start {
     -webkit-transform: translateY(100%);
-    opacity: 1;
     z-index: 30;
 }
 
 #jqt .slideup.out.start, #jqt .slideup.in.reverse {
-    -webkit-transform: translateY(0);
-    opacity: .99;
+    -webkit-transform: translateY(-100%);
     z-index: 10;
 }
 
 #jqt .slideup.out, #jqt .slideup.out.reverse, #jqt .slideup.in.start, #jqt .slideup.in.reverse.start {
-    opacity: 1;
     -webkit-transform: translateY(0);
     z-index: 30;
+}
+
+/* Glideup (like Slideup, but for incoming page only) */
+
+#jqt .glideup.start {
+    -webkit-transition-property: -webkit-transform, opacity;
+}
+
+#jqt .glideup.out.reverse.start, #jqt .glideup.out.start {
+    opacity: 0.99; /* added such that animationEnd event is called */
+}
+
+#jqt .glideup.in:not(.reverse), #jqt .glideup.out.reverse.start {
+    -webkit-transform: translateY(100%);
+}
+
+#jqt .glideup.out, #jqt .glideup.out.reverse, #jqt .glideup.in.start, #jqt .glideup.in.reverse.start {
+    -webkit-transform: translateY(0);
 }
 
 /* Swap */

@@ -21,16 +21,26 @@ $(document).ready(function(){
   };
 
   function supportForTouchScroll() {
-    var reg = /OS (5(_\d+)*) like Mac OS X/i;
+    var ios = /OS (\d+(_\d+)*) like Mac OS X/i;
+    var osx = /OS X (\d+(_\d+)*)/i;
     
     var arrays, version;
     
-    version = {major: 0, minor: 0, patch: 0};
-    arrays = reg.exec(navigator.userAgent);
+    arrays = ios.exec(navigator.userAgent);
     if (arrays && arrays.length > 1) {
-        version = parseVersionString(arrays[1], '_');
+      version = parseVersionString(arrays[1], '_');
+      if (version.major >= 5) {
+        return true;
+      }
     }
-    return version.major >= 5;
+    arrays = osx.exec(navigator.userAgent);
+    if (arrays && arrays.length > 1) {
+      version = parseVersionString(arrays[1], '_');
+      if (version.major >= 10 && version.minor >= 7) {
+        return true;
+      }
+    }
+    return false;
   };
 
   function refreshScroll($page) {
@@ -538,6 +548,9 @@ iScroll.prototype = {
       this.scroller.style[vendor + 'Transform'] = trnOpen + newX + 'px,' + newY + 'px' + trnClose + ' scale(' + scale + ')';
 
       if (that.options.onZoom) that.options.onZoom.call(that, e);
+      return;
+    } else if (!hasTouch && e.ctrlKey) {
+      //@BeeDesk simulate two finger pan
       return;
     }
 
