@@ -1,11 +1,11 @@
 CACHE MANIFEST
-# Rev 17
+# Rev 18
 
 index.html
 jqtouch.png
 ../../jqtouch/jqtouch.css
 ../../jqtouch/jqtouch.js
-../../jqtouch/jquery-1.5.1.min.js
+../../jqtouch/jquery-1.7.1.min.js
 ../../themes/jqt/theme.css
 ../../extensions/jqt.offline.js
 ../../themes/jqt/img/back_button.png
