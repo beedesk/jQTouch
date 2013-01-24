@@ -1,6 +1,8 @@
 BeeDesk's fork. 
 =======
 
+(as of Jan 2013, I will stop maintaining this fork. My effort will focus on the offical fork of senchalabs. I plan to port all features below to the official branch. But, I cannot commit to any timeframe.)
+
 - iPad splitscreen layout,
 - Most accurate apple theme,
 - iScroll integration,
