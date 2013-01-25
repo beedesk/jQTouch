@@ -5,7 +5,7 @@ As of Jan 2013, I will stop maintaining this fork. I has become the maintainer o
 
 I would like spend some time porting splitview and other features to the official branch. If you like to see it happens much sooner, please consider making a donation:</p>
 
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=8252HVTXVCJB8&amp;lc=US&amp;item_name=jQTouch&amp;item_number=posterous&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" alt="PayPal - The safer, easier way to pay online!" /></a>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=8252HVTXVCJB8&amp;lc=US&amp;item_name=jQTouch&amp;item_number=github&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" alt="PayPal - The safer, easier way to pay online!" /></a>
 
 Features
 -------
