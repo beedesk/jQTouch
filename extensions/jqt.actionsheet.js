@@ -82,7 +82,7 @@
     var methods = {
         init: function(options) {
             $(this).addClass('actionsheet');
-            $(this).data({shown: false});
+            $(this).data('actionsheet', {shown: false});
         },
         show: show,
         hide: hide
