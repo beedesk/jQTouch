@@ -26,7 +26,7 @@
 */
 (function($) {
     $.jQTouch = function(options) {
-        var SUPPORT_TOUCH = (typeof Touch != "undefined");
+        var SUPPORT_TOUCH = 'ontouchstart' in window;
         var START_EVENT = SUPPORT_TOUCH? 'touchstart' : 'mousedown';
         var MOVE_EVENT = SUPPORT_TOUCH? 'touchmove' : 'mousemove';
         var END_EVENT = SUPPORT_TOUCH? 'touchend' : 'mouseup';
@@ -979,7 +979,7 @@
             var pat = parseInt(x[2]) || 0;
             return {major: maj, minor: min, patch: pat};
         };
-      
+
         /* -- tag for code merge --
         function supportForAnimationEvents() {
         function supportForCssMatrix() {
@@ -987,9 +987,9 @@
         */
         function supportForTouchScroll() {
             var reg = /OS (5(_\d+)*) like Mac OS X/i;
-            
+
             var arrays, version;
-            
+
             version = {major: 0, minor: 0, patch: 0};
             arrays = reg.exec(navigator.userAgent);
             if (arrays && arrays.length > 1) {
@@ -999,29 +999,29 @@
         };
         function supportForTransform3d() {
             _debug();
-  
+
             var head, body, style, div, result;
-  
+
             head = document.getElementsByTagName('head')[0];
             body = document.body;
-  
+
             style = document.createElement('style');
             style.textContent = '@media (transform-3d),(-o-transform-3d),(-moz-transform-3d),(-ms-transform-3d),(-webkit-transform-3d),(modernizr){#jqtTestFor3dSupport{height:3px}}';
-  
+
             div = document.createElement('div');
             div.id = 'jqtTestFor3dSupport';
-  
+
             // Add to the page
             head.appendChild(style);
             body.appendChild(div);
-  
+
             // Check the result
             result = div.offsetHeight === 3;
-  
+
             // Clean up
             style.parentNode.removeChild(style);
             div.parentNode.removeChild(div);
-  
+
             // Pass back result
             // _debug('Support for 3d transforms: ' + result);
             return result;
@@ -1496,10 +1496,9 @@
 
         // Document ready stuff
         function start() {
-
             // Store some properties in the jQuery support object
             $.support.WebKitCSSMatrix = (typeof WebKitCSSMatrix != "undefined");
-            $.support.touch = (typeof Touch != "undefined");
+            $.support.touch = SUPPORT_TOUCH;
             $.support.WebKitAnimationEvent = (typeof WebKitTransitionEvent != "undefined");
             $.support.wide = (window.screen.width >= 768);
             $.support.transform3d = supportForTransform3d();
@@ -1571,7 +1570,7 @@
                 console.warn('Could not find an element with the id "jqt", so the body id has been set to "jqt". This might cause problems, so you should prolly wrap your panels in a div with the id "jqt".');
                 $body = $('body').attr('id', 'jqt');
             }
-            
+
             // Add some specific css if need be
             if ($.support.transform3d) {
                 $body.addClass('supports3d');
@@ -1582,21 +1581,21 @@
             }
             */
 
-            // workaround flexible-box jump issue: 
+            // workaround flexible-box jump issue:
             // https://bugs.webkit.org/show_bug.cgi?id=46657
             if (jQTSettings.workaroundFlexboxJump) {
               var afjTimer;
 
               function resumeFlex($page) {
-                clearTimeout(afjTimer); 
+                clearTimeout(afjTimer);
                 $page.find('.view').each(function (i, view) {
                   $(view).css({'height': undefined});
                 });
                 afjTimer = setTimeout(function() {
                   $page.find('.view').each(function (i, view) {
-                    var height = $(view).height(); 
+                    var height = $(view).height();
                     $(view).css({'height': ($(view).height() + 'px')});
-                  });                  
+                  });
                 }, 75);
               }
               $("#jqt").delegate('#jqt > *', 'pageAnimationEnd', function(event, info) {
@@ -1650,7 +1649,7 @@
                     }
                 });
             }
-            
+
             for (var i=0, len=jQTSettings.engageable.length; i<len; i++) {
               var item = jQTSettings.engageable[i];
               $(item.query).each(function(e, gear) {
@@ -1689,7 +1688,6 @@
             $(jQTSettings.delayedinputSelector).each(function(i, gear) {
               var $gear = $(gear);
               $gear.live("touchstart mousedown", function(e) {
-                console.log("touch");
                 e.preventDefault();
                 if (!!delayinputTimer) {
                   clearTimeout(delayinputTimer);
