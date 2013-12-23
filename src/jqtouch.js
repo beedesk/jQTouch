@@ -876,8 +876,6 @@
 
         initFXExtensions();
 
-        jQTSettings.starter(start);
-
         // Expose public methods and properties
         publicObj = {
             addAnimation: addAnimation,
@@ -890,6 +888,10 @@
             settings: jQTSettings,
             submitForm: submitHandler
         };
+
+        // must be called publicObj assignment to prevent timing problem with extension loading. 
+        jQTSettings.starter(start);
+
         return publicObj;
     };
     
